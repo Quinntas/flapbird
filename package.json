@@ -1,0 +1,20 @@
+{
+  "name": "flapbird",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.2.0",
+    "tsx": "^4.17.0",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "raylib": "^0.14.0"
+  }
+}
