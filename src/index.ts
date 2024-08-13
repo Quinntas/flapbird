@@ -12,15 +12,13 @@ class Pipe {
     private position: r.Vector2
     private readonly texture: r.Texture2D
     private readonly speed: number = 200
-    private readonly flipped: boolean
 
     getPosition() {
         return this.position
     }
 
-    constructor(texture: r.Texture2D, position: r.Vector2, flipped: boolean) {
+    constructor(texture: r.Texture2D, position: r.Vector2) {
         this.texture = texture
-        this.flipped = flipped
         this.position = position
     }
 
@@ -29,8 +27,7 @@ class Pipe {
     }
 
     draw() {
-        const rotation = this.flipped ? 180 : 0
-        r.DrawTextureEx(this.texture, this.position, rotation, 0.5, r.WHITE)
+        r.DrawTextureEx(this.texture, this.position, 0, 0.5, r.WHITE)
     }
 }
 
@@ -72,20 +69,45 @@ class Bird {
 
 class PipeManager {
     private readonly pipes: Pipe[]
-    private pipeTexture = r.LoadTexture("../resources/pipe.png")
+    private upPipeTexture = r.LoadTexture("../resources/pipe_up.png")
+    private downPipeTexture = r.LoadTexture("../resources/pipe_down.png")
     private spawnDelay = 1;
-    private readonly minPipeGap = 30
-    private readonly maxPipeGap = 60
+    private readonly minPipeGap = 40
+    private readonly maxPipeGap = 80
 
     constructor() {
         this.pipes = []
     }
 
     spawn() {
-        const x = screenWidth + this.pipeTexture.width
         const pipeGap = r.GetRandomValue(this.minPipeGap, this.maxPipeGap)
-        this.pipes.push(new Pipe(this.pipeTexture, {x, y: screenCenter.y - pipeGap}, true))
-        this.pipes.push(new Pipe(this.pipeTexture, {x, y: screenCenter.y + pipeGap}, false))
+        const operator = r.GetRandomValue(1, 3)
+
+        let downPipeY = ((-screenCenter.y) - pipeGap)
+        let upPipeY = (screenCenter.y + pipeGap)
+
+        if (operator === 2) {
+            const offset = r.GetRandomValue(0, 100)
+            downPipeY += offset
+            upPipeY += offset
+        } else if (operator === 3) {
+            const offset = r.GetRandomValue(0, 100)
+            downPipeY -= offset
+            upPipeY -= offset
+        }
+
+        this.pipes.push(
+            new Pipe(this.downPipeTexture, {
+                x: screenWidth + this.downPipeTexture.width,
+                y: downPipeY
+            })
+        )
+        this.pipes.push(
+            new Pipe(this.upPipeTexture, {
+                x: screenWidth + this.upPipeTexture.width,
+                y: upPipeY
+            })
+        )
     }
 
     update(frameTime: number) {
@@ -99,18 +121,19 @@ class PipeManager {
         for (let i = 0; i < this.pipes.length; i++) {
             this.pipes[i].update(frameTime)
 
-            if (this.pipes[i].getPosition().x < -this.pipeTexture.width)
+            if (this.pipes[i].getPosition().x < -this.upPipeTexture.width)
                 this.pipes.splice(i, 1)
         }
     }
 
     draw() {
         for (const pipe of this.pipes) {
-            console.log(pipe.getPosition())
             pipe.draw()
         }
     }
 }
+
+r.SetRandomSeed(r.GetTime())
 
 const bird = new Bird(r.LoadTexture("../resources/bird.png"))
 const pipeManager = new PipeManager()
