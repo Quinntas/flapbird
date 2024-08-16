@@ -25,6 +25,14 @@ export class Bird extends Component {
 
     private readonly _jumpKey: number = KEY_SPACE
 
+    get texture() {
+        return this._texture
+    }
+
+    get position() {
+        return this._position
+    }
+
     constructor(texture: Texture2D) {
         super("Bird");
         this._texture = texture;

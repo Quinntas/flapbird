@@ -13,7 +13,7 @@ export const engine: Engine = new Engine({
 });
 
 const birdTexture = LoadTexture("resources/bird.png")
-const bird = new Bird(birdTexture);
+export const bird = new Bird(birdTexture);
 
 const upPipeTexture = LoadTexture("resources/pipe_up.png")
 const downPipeTexture = LoadTexture("resources/pipe_down.png")

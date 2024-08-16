@@ -11,6 +11,10 @@ export class Pipe extends Component {
         return this._position
     }
 
+    get texture() {
+        return this._texture
+    }
+
     constructor(texture: Texture2D, position: Vector2) {
         super("Pipe")
         this._texture = texture
